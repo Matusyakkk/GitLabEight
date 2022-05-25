@@ -55,12 +55,10 @@ public class SingleLinkedList<K, V> implements ICollection<K, V> {
 
     @Override
     public V get(K key) {
-        V value = null;
-
         for (Node<K, V> temp = head; temp != null; temp = temp.getNext())
             if (temp.getKey().equals(key))
                 return temp.getValue();
-        return value;
+        return null;
     }
 
     @Override

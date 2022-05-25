@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Hashtable;
 
-
 public class HashTableList<K, V> implements ICollection<K, V> {
     SingleLinkedList<K, V>[] table;
     int size;
@@ -20,28 +19,25 @@ public class HashTableList<K, V> implements ICollection<K, V> {
     }
 
     public int getHash(@NotNull K key) {
-        return key.hashCode()%size;
+        return key.hashCode() % size;
     }
 
     @Override
     public void put(K key, V value) {
-        int hash = getHash(key);
-        SingleLinkedList<K, V> obj = table[hash];
-        obj.put(key, value);
+        table[getHash(key)]
+                .put(key, value);
     }
 
     @Override
     public V get(K key) {
-        int hash = getHash(key);
-        SingleLinkedList<K, V> obj = table[hash];
-        return obj.get(key);
+        return table[getHash(key)]
+                .get(key);
     }
 
     @Override
     public void remove(K key) {
-        int hash = getHash(key);
-        SingleLinkedList<K, V> obj = table[hash];
-        obj.remove(key);
+        table[getHash(key)]
+                .remove(key);
     }
 
     @Override
