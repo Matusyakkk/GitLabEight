@@ -1,94 +1,82 @@
 package SingleLinkedList;
 
-import Interfaces.LinkedList;
+import Interfaces.ICollection;
 
-public class SingleLinkedList<E> implements LinkedList<E> {
-    class Node<E> {
-        private E data;
-        private Node<E> nextNode;
+public class SingleLinkedList<K, V> implements ICollection<K, V> {
+    class Node<K, V> {
+        private K key;
+        private V value;
+        private Node<K, V> next;
 
-        public Node(E data){
-            this.data = data;
+        public Node(K key, V value){
+            this.key = key;
+            this.value = value;
+            next = null;
         }
 
-        public E getData() {
-            return data;
+        public Node(){
+            next = null;
         }
 
-        public void setData(E data) {
-            this.data = data;
+        public K getKey() {
+            return key;
         }
 
-        public Node<E> getNextNode() {
-            return nextNode;
+        public void setKey(K key) {
+            this.key = key;
         }
 
-        public void setNextNode(Node<E> nextNode) {
-            this.nextNode = nextNode;
+        public V getValue() {
+            return value;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
+
+        public Node<K, V> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<K, V> next) {
+            this.next = next;
         }
     }
 
-    private Node<E> head;
-    private Node<E> tail = null;
+    private Node<K, V> head;
+    private Node<K, V> tail = null;
 
     @Override
-    public void addFirst(E data) {
-        Node<E> newNode = new Node<>(data);
-        newNode.setNextNode(head);
+    public void put(K key, V value) {
+        Node<K, V> newNode = new Node<>(key, value);
+        newNode.setNext(head);
         head = newNode;
     }
 
     @Override
-    public void addAt(int index, E data) {
-        Node<E> new_Node = new Node<>(data);
-        Node<E> node = head;
+    public V get(K key) {
+        V value = null;
 
-        for (int i = 0; i < index - 1; i++) node = node.getNextNode();
-        new_Node.setNextNode(node.getNextNode());
-        node.setNextNode(new_Node);
+        for (Node<K, V> temp = head; temp != null; temp = temp.getNext())
+            if (temp.getKey().equals(key))
+                return temp.getValue();
+        return value;
     }
 
     @Override
-    public void add(E data) {
-        Node<E> newNode = new Node<>(data);
-
-        if (this.head == null) head = newNode;
-        else {
-            Node<E> currentNode = head;
-            while (currentNode.getNextNode() != null) currentNode = currentNode.getNextNode();
-            currentNode.setNextNode(newNode);
-        }
-    }
-
-    @Override
-    public void deleteFirst() {
-        if (this.head != null) {
-            this.head = this.head.getNextNode();
-        }
-    }
-
-    @Override
-    public void deleteAt(int index) {
-        Node<E> node = head;
-        for (int i = 0; i < index - 1; i++) {
-            node = node.getNextNode();
-        }
-        node.setNextNode(node.getNextNode().getNextNode());
-    }
-
-    @Override
-    public void deleteLast() {
+    public void remove(K key) {
         if (head == null) {
             return;
         } else {
-            if (head != tail) {
-                int count = 0;
-                Node<E> current = head;
-                while (current.getNextNode() != tail) {
-                    current = current.getNextNode();
-                    count++;
+            if (head.getNext() != null) {
+                Node<K, V> prev = null;
+                while (head != null) {
+                    if (head.getKey().equals(key))
+                        break;
+                    prev = head;
+                    head = head.next;
                 }
-                deleteAt(count);
+                prev.setNext(head.getNext());
             } else {
                 head = tail = null;
             }
@@ -96,34 +84,15 @@ public class SingleLinkedList<E> implements LinkedList<E> {
     }
 
     @Override
-    public int indexOf(Object o) {
-        int index = 0;
-        if (o == null) {
-            for (Node<E> x = head; x != null; x = x.getNextNode()) {
-                if (x.getData() == null)
-                    return index;
-                index++;
-            }
-        } else {
-            for (Node<E> x = head; x != null; x = x.getNextNode()) {
-                if (o.equals(x.getData()))
-                    return index;
-                index++;
-            }
-        }
-        return -1;
-    }
-
-    @Override
     public void show() {
-        Node<E> currentNode = head;
+        Node<K, V> currentNode = head;
         if(currentNode == null){
             System.out.println("Linked list is empty");
         }
         else {
             while(currentNode != null) {
-                System.out.print(currentNode.getData() + " ");
-                currentNode = currentNode.getNextNode();
+                System.out.print(currentNode.getValue() + " ");
+                currentNode = currentNode.getNext();
             }
             System.out.println();
         }
